@@ -1,0 +1,48 @@
+$columns: 12!default;
+$gutter:  20px!default;
+
+$xs:      0px;
+$sm:      576px;
+$md:      768px;
+$lg:      992px;
+$xl:      1200px;
+
+@mixin col($name: ''){
+  @for $i from 1 through $columns{
+    .col#{$name}-#{$i}{
+      width: $i / $columns * 100%;
+    }
+  }
+  .hidden#{$name}{display: none;}
+}
+
+%col{
+  float: left;
+  position: relative;
+  min-height: 1px;
+  padding: 0 $gutter * 0.5;
+}
+
+@include col();
+
+@for $i from 12 through $columns{ .col-xs-#{$i}, .col-sm-#{$i}, .col-md-#{$i}, .col-lg-#{$i}, .col-xl-#{$i},{ @extend %col; }}
+
+@media only screen and (min-width: $xs){
+  @include col('-xs');
+}
+
+@media only screen and (min-width: $sm){
+  @include col('-sm');
+}
+
+@media only screen and (min-width: $md){
+  @include col('-md');
+}
+
+@media only screen and (min-width: $lg){
+  @include col('-lg');
+}
+
+@media only screen and (min-width: $xl){
+  @include col('-xl');
+}
