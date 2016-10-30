@@ -1,3 +1,6 @@
+/* ------------------- *\
+        Variables
+\* ------------------- */
 $columns: 12!default;
 $gutter:  20px!default;
 
@@ -7,13 +10,21 @@ $md:      768px;
 $lg:      992px;
 $xl:      1200px;
 
-@mixin col($name: ''){
-  @for $i from 1 through $columns{
-    .col#{$name}-#{$i}{
-      width: $i / $columns * 100%;
-    }
+/* ------------------- *\
+        Extends
+\* ------------------- */
+
+%clearfix{
+  &::before, &::after {
+    content:"";
+    display:table;
   }
-  .hidden#{$name}{display: none;}
+  &::after {
+      clear:both;
+  }
+  & {
+      zoom:1; /* For IE 6/7 (trigger hasLayout) */
+  }
 }
 
 %col{
@@ -23,9 +34,32 @@ $xl:      1200px;
   padding: 0 $gutter * 0.5;
 }
 
-@include col();
+/* ------------------- *\
+        Mixins
+\* ------------------- */
 
-@for $i from 12 through $columns{ .col-xs-#{$i}, .col-sm-#{$i}, .col-md-#{$i}, .col-lg-#{$i}, .col-xl-#{$i},{ @extend %col; }}
+@mixin col($name: ''){
+  .hidden#{$name}{display: none;}
+  .col#{$name}-center{margin: 0 auto; float: none;}
+  @for $i from 1 through $columns{
+    .col#{$name}-#{$i}{
+      width: $i / $columns * 100%;
+    }
+  }
+}
+
+/* ------------------- *\
+        Grid
+\* ------------------- */
+
+.row {
+  margin: 0 $gutter * -0.5;
+  @extend %clearfix;
+}
+
+@for $i from 1 through $columns{
+  .col-xs-#{$i}, .col-sm-#{$i}, .col-md-#{$i}, .col-lg-#{$i}, .col-xl-#{$i},{ @extend %col; }
+}
 
 @media only screen and (min-width: $xs){
   @include col('-xs');
